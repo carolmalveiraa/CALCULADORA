@@ -1,6 +1,6 @@
 const previousOperationText = document.querySelector("#previous-operation");
 const currentOperationText = document.querySelector("#current-operation");
-const button = document.querySelectorAll("#button-container button");
+const buttons = document.querySelectorAll("#buttons-container button");
 
 class Calculator {
   constructor(previousOperationText, currentOperationText) {
@@ -9,9 +9,10 @@ class Calculator {
     this.currentOperation = "";
   }
 
-  // Adicionando números ao display
+  // add digit to calculator screen
   addDigit(digit) {
-    // Checando operção atual
+    console.log(digit);
+    // Check if number already has a dot
     if (digit === "." && this.currentOperationText.innerText.includes(".")) {
       return;
     }
@@ -20,17 +21,18 @@ class Calculator {
     this.updateScreen();
   }
 
-  // Novo método para processar operações
+  // process all calculator operations
   processOperation(operation) {
-    // Checando se há um número no display
+    // Check if current value is empty
     if (this.currentOperationText.innerText === "" && operation !== "C") {
+      // Change operation
       if (this.previousOperationText.innerText !== "") {
         this.changeOperation(operation);
       }
       return;
     }
 
-    // Antes
+    // Get current and previous values
     let operationValue;
     let previous = +this.previousOperationText.innerText.split(" ")[0];
     let current = +this.currentOperationText.innerText;
@@ -48,7 +50,7 @@ class Calculator {
         operationValue = previous * current;
         this.updateScreen(operationValue, operation, current, previous);
         break;
-      case "÷":
+      case "/":
         operationValue = previous / current;
         this.updateScreen(operationValue, operation, current, previous);
         break;
@@ -56,7 +58,7 @@ class Calculator {
         this.processDelOperator();
         break;
       case "CE":
-        this.processClearCurrentlOperator();
+        this.processClearCurrentOperator();
         break;
       case "C":
         this.processClearOperator();
@@ -69,7 +71,7 @@ class Calculator {
     }
   }
 
-  // Atualizando o display
+  // Change values of calculator screen
   updateScreen(
     operationValue = null,
     operation = null,

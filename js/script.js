@@ -11,10 +11,9 @@ class Calculator {
 
     // Adicionando números ao display
     addDigit(digit) {
-
         // Checando operção atual
-        if(digit === "." && this.currentOperation.includes(".")){
-            return;
+        if(digit === "." && this.currentOperationText.innerText.includes(".")){
+        return;
         }
 
         this.currentOperation = digit;
@@ -23,31 +22,68 @@ class Calculator {
 
     // Novo método para processar operações
     processOperation(operation) {
+
+        // Checando se há um número no display
+        if (this.currentOperationText.innerText === "" && operation !== "C") {
+            if (this.previousOperationText.innerText !== "") {
+                this.changeOperation(operation);
+            }
+            return;
+        }
+
         // Antes
         let operationValue;
-        let previous = +this.previousOperationText.innerText;
+        let previous = +this.previousOperationText.innerText.split(" ")[0];
         let current = +this.currentOperationText.innerText;
 
         switch(operation) {
             case "+":
                 operationValue = previous + current;
+                this.updateScreen(operationValue, operation, current, previous);
                 break;
             case "-":
                 operationValue = previous - current;
+                this.updateScreen(operationValue, operation, current, previous);
                 break;
-            case "x":
+            case "*":
                 operationValue = previous * current;
+                this.updateScreen(operationValue, operation, current, previous);
                 break;
             case "÷":
                 operationValue = previous / current;
+                this.updateScreen(operationValue, operation, current, previous);
                 break;
+            case "DEL":
+                this.processDelOperator();
+                break;
+            case "CE":
+                this.processClearCurrentlOperator();
+                break;
+            case "C":
+                this.processClearOperator();
+                break;
+            case "=":
+                this.processEqualOperator();
+                break;
+                default:
+                    return;
         }
     }
 
     // Atualizando o display
-    updateScreen() {
-        this.currentOperationText.innerText += this.currentOperation;
-    }
+    updateScreen(
+        operationValue = null, 
+        operation = null,
+        current = null,
+        previous = null
+    ) {
+        if (operantionValue === null ) {
+            this.currentOperationText.innerText += this.currentOperation;
+        }
+        else {
+            this.currentOperationText.innerText = operationValue;
+            this.previousOperationText.innerText = `${previous} ${operation} ${current}`;
+        }
 }
 
 const calc = new Calculator(previousOperationText, currentOperationText);
